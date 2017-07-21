@@ -45,11 +45,11 @@ con.commit();//try的最后提交事务
      不可重复读（unrepeatable read）：对同一记录的两次读取不一致，因为另一事务对该记录做了修改；
      幻读（phantom read）：对同一张表的记录查询不一致，因为另一事务插入了一条记录
 
-不可重复读和幻读的区别：
-不可重复读是读取到了另一事务的更新；
-幻读是读取到了另一事务的插入（MySQL中无法测试到幻读）
+    不可重复读和幻读的区别：
+    不可重复读是读取到了另一事务的更新；
+    幻读是读取到了另一事务的插入（MySQL中无法测试到幻读）
 
- 3、四大隔离级别
+3、四大隔离级别
     
 4个等级的事务隔离级别，在相同的数据环境下，使用相同的输入，执行相同的工作，根据不同的隔离级别，可以导致不同的结果，不同事务的隔离级别能够解决的数据并发问题的能力是不同的。
 
@@ -65,3 +65,18 @@ con.commit();//try的最后提交事务
 4> READ UNCOMMITTED（读未提交数据）
    可能出现任何事物并发问题
    性能最好
+   
+MySQL的默认隔离级别为repeatable read，可以通过下面语句查看：
+   select @@tx isolation
+   
+也可以通过下面语句来设置当前连接的隔离级别：
+   settransaction isolationlevel[四选一]
+   
+JDBC设置隔离级别
+    con.setTransactionlsolation(int level)
+	
+事务总结：
+    事务的特性：ACID；
+	事务开始边界与结束边界：开始边界(con.setAutoCommit(false)),结束边界(con.commit()或
+	con.rollback());
+	多个事务并发执行时才需要考虑并发事务
