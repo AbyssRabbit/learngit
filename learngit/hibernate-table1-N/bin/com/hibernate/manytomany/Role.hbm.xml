@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+      "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+      "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+      
+<hibernate-mapping>
+    <!-- 配置类和表对应 
+         class标签
+         name属性：实体类全路径
+         table属性：数据库表名称
+    -->
+    <class name="com.hibernate.manytomany.Role" table="t_Role">
+          <!-- 配置实体类id和表id对应
+               Hibernate要求实体类有一个属性唯一值
+               Hibernate要求有字段作为唯一值
+           -->
+           <!-- id标签
+                name属性：实体类里面id属性名称
+                column属性：生成的表字段名称
+                native： 主键自动增长，根据使用的数据库俩帮你选择哪个表示符
+	            uuid： web阶段写代码生成uuid值，hibernate帮我们生成uuid值
+	                                   使用uuid生成策略，实体类id属性类型必须是字符串类型
+            -->
+           <id name="Role_id" column="Role_id">
+              <!-- 设置数据库表id增长策略 
+                   native:生成表id值就是主键自动增长
+              -->
+              <generator class="native"></generator>
+           </id>
+           <!-- 配置其他属性和表的字段对应
+                name属性：实体类里面id属性名称
+                column属性：生成的表字段名称
+            -->
+           <property name="Role_name" column="Role_name"></property>
+           <property name="Role_password" column="Role_password"></property>
+           
+            <!-- 在角色里面表示所有用户，使用set标签
+               name属性：用户set集合名称
+               table属性：第三张表名称
+            -->
+            <set name="setUser" table="user_role">
+                <!-- key标签里面配置
+                                                     配置当前映射文件在第三张表的外键名称
+                 -->
+                <key column="roleid"></key>
+                <!-- class里面写用户实体类全路径
+                     column用户在第三张表的外键名称
+                 -->
+                <many-to-many class="com.hibernate.manytomany.User" column="userid"/>
+            </set>
+           
+    </class>
+</hibernate-mapping>
